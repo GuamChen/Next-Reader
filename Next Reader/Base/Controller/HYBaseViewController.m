@@ -72,7 +72,6 @@
     
     // 基础配置
     self.view.backgroundColor = HY_COLOR_BG_WHITE;
-    self.automaticallyAdjustsScrollViewInsets = NO;
     self.extendedLayoutIncludesOpaqueBars = YES;
     
     // 设置导航栏
@@ -124,7 +123,10 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     if (self.hy_navBarStyle == HYNavigationBarStyleDefault) {
-        return UIStatusBarStyleDarkContent;
+        if (@available(iOS 13.0, *)) {
+            return UIStatusBarStyleDarkContent;
+        }
+        return UIStatusBarStyleDefault;
     }
     return UIStatusBarStyleDefault;
 }

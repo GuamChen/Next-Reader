@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class HYDocumentItem;
+#import "HYDocumentItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
