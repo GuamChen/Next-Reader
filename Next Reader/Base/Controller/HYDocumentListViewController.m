@@ -115,6 +115,7 @@
 
     HYDocumentItem *item = self.dataSource[indexPath.row];
     HYDocumentPreviewViewController *previewController = [[HYDocumentPreviewViewController alloc] initWithDocumentItem:item];
+    previewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:previewController animated:YES];
 }
 

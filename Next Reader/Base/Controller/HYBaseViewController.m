@@ -89,6 +89,7 @@
     
     // 隐藏系统导航栏
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [self hy_updateBackButtonIfNeeded];
     
     // 首次出现回调
     if (self.hy_isFirstAppear) {
@@ -280,12 +281,21 @@
                             image:(NSString *)imageName
                            target:(id)target
                            action:(SEL)action {
+    [self.hy_leftButton setImage:nil forState:UIControlStateNormal];
     [self.hy_leftButton setTitle:title forState:UIControlStateNormal];
     [self.hy_leftButton setTitleColor:HY_COLOR_TEXT_PRIMARY forState:UIControlStateNormal];
     self.hy_leftButton.titleLabel.font = HY_FONT(HY_FONT_SIZE_BODY);
     
     if (imageName) {
-        [self.hy_leftButton setImage:HY_IMAGE_ORIGINAL(imageName) forState:UIControlStateNormal];
+        UIImage *buttonImage = HY_IMAGE_ORIGINAL(imageName);
+        if (!buttonImage) {
+            if (@available(iOS 13.0, *)) {
+                NSString *systemName = [imageName isEqualToString:@"nav_close"] ? @"xmark" : @"chevron.left";
+                buttonImage = [UIImage systemImageNamed:systemName];
+            }
+        }
+        [self.hy_leftButton setImage:buttonImage forState:UIControlStateNormal];
+        self.hy_leftButton.tintColor = HY_COLOR_TEXT_PRIMARY;
     }
     
     if (target && action) {
@@ -318,6 +328,20 @@
 
 - (void)hy_hideRightButton {
     self.hy_rightButton.hidden = YES;
+}
+
+- (void)hy_updateBackButtonIfNeeded {
+    if (self.hy_hideNavigationBar) {
+        return;
+    }
+
+    BOOL shouldShowBackButton = self.navigationController.viewControllers.count > 1 || self.presentingViewController != nil;
+    if (shouldShowBackButton) {
+        [self hy_setBackButtonWithType:HYBackButtonTypeDefault];
+        self.hy_leftButton.hidden = NO;
+    } else {
+        self.hy_leftButton.hidden = YES;
+    }
 }
 
 #pragma mark - 导航栏样式更新

@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HYTextReaderView : UIView
 
-- (void)updateWithText:(NSString *)text;
+- (void)updateWithText:(NSString *)text cacheKey:(NSString *)cacheKey;
 
 @end
 
