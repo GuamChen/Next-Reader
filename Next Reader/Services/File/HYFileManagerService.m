@@ -77,6 +77,48 @@
     return documents.copy;
 }
 
+- (BOOL)importDocumentAtURL:(NSURL *)sourceURL error:(NSError * _Nullable __autoreleasing *)error {
+    if (sourceURL == nil) {
+        if (error != NULL) {
+            *error = [NSError errorWithDomain:NSCocoaErrorDomain
+                                         code:NSFileNoSuchFileError
+                                     userInfo:@{NSLocalizedDescriptionKey: @"未获取到可导入的文件。"}];
+        }
+        return NO;
+    }
+
+    HYDocumentType documentType = [self documentTypeForPath:sourceURL.path];
+    if (documentType == HYDocumentTypeUnknown) {
+        if (error != NULL) {
+            *error = [NSError errorWithDomain:NSCocoaErrorDomain
+                                         code:NSFileReadUnknownError
+                                     userInfo:@{NSLocalizedDescriptionKey: @"当前文件类型暂不支持导入。"}];
+        }
+        return NO;
+    }
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *importDirectoryURL = [self hy_importDirectoryURL];
+    if (![fileManager fileExistsAtPath:importDirectoryURL.path]) {
+        [fileManager createDirectoryAtURL:importDirectoryURL
+              withIntermediateDirectories:YES
+                               attributes:nil
+                                    error:error];
+        if ((error != NULL && *error != nil) || ![fileManager fileExistsAtPath:importDirectoryURL.path]) {
+            return NO;
+        }
+    }
+
+    BOOL didStartAccessing = [sourceURL startAccessingSecurityScopedResource];
+    NSURL *destinationURL = [self hy_uniqueDestinationURLForFileName:sourceURL.lastPathComponent ?: @"ImportedFile"
+                                                        directoryURL:importDirectoryURL];
+    BOOL copySucceeded = [fileManager copyItemAtURL:sourceURL toURL:destinationURL error:error];
+    if (didStartAccessing) {
+        [sourceURL stopAccessingSecurityScopedResource];
+    }
+    return copySucceeded;
+}
+
 - (HYDocumentType)documentTypeForPath:(NSString *)filePath {
     NSString *extension = filePath.pathExtension.lowercaseString;
     if (extension.length == 0) {
@@ -128,6 +170,32 @@
     }
 
     return rootURLs.copy;
+}
+
+- (NSURL *)hy_importDirectoryURL {
+    NSURL *documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+    return [documentsURL URLByAppendingPathComponent:@"Imported" isDirectory:YES];
+}
+
+- (NSURL *)hy_uniqueDestinationURLForFileName:(NSString *)fileName directoryURL:(NSURL *)directoryURL {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *baseName = [fileName stringByDeletingPathExtension];
+    NSString *pathExtension = fileName.pathExtension;
+    NSURL *destinationURL = [directoryURL URLByAppendingPathComponent:fileName];
+    NSUInteger index = 1;
+
+    while ([fileManager fileExistsAtPath:destinationURL.path]) {
+        NSString *candidateName = nil;
+        if (pathExtension.length > 0) {
+            candidateName = [NSString stringWithFormat:@"%@-%lu.%@", baseName, (unsigned long)index, pathExtension];
+        } else {
+            candidateName = [NSString stringWithFormat:@"%@-%lu", baseName, (unsigned long)index];
+        }
+        destinationURL = [directoryURL URLByAppendingPathComponent:candidateName];
+        index += 1;
+    }
+
+    return destinationURL;
 }
 
 @end

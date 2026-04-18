@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 - (NSArray<HYDocumentItem *> *)fetchLocalDocuments;
+- (BOOL)importDocumentAtURL:(NSURL *)sourceURL error:(NSError * _Nullable __autoreleasing *)error;
 - (HYDocumentType)documentTypeForPath:(NSString *)filePath;
 - (NSString *)formattedFileSize:(unsigned long long)fileSize;
 

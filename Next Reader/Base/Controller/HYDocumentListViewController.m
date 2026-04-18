@@ -11,8 +11,9 @@
 #import "HYDocumentListCell.h"
 #import "HYDocumentPreviewViewController.h"
 #import "HYFileManagerService.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
-@interface HYDocumentListViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface HYDocumentListViewController () <UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray<HYDocumentItem *> *dataSource;
@@ -25,10 +26,10 @@
     [super viewDidLoad];
 
     [self hy_setNavTitle:@"我的文档"];
-    [self hy_setRightButtonWithTitle:@"刷新"
+    [self hy_setRightButtonWithTitle:@"导入"
                                image:nil
                               target:self
-                              action:@selector(addDocumentTapped)];
+                              action:@selector(importDocumentTapped)];
 
     [self hy_setupTableView];
 }
@@ -81,14 +82,18 @@
 
     [self hy_showEmptyViewWithImage:nil
                               title:@"还没有可阅读的本地文档"
-                            message:@"当前沙盒中的 Documents / Inbox 目录为空。Day 3 会继续接入系统导入入口。"];
+                            message:@"当前沙盒中的 Documents / Imported / Inbox 目录为空。点击右上角“导入”添加文档。"];
 }
 
-- (void)addDocumentTapped {
-    [self hy_loadDocuments];
-    if (self.dataSource.count == 0) {
-        [self hy_showToast:@"已刷新，本地目录暂时没有文档"];
+- (void)importDocumentTapped {
+    UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[(NSString *)kUTTypeItem]
+                                                                                                    inMode:UIDocumentPickerModeImport];
+    picker.delegate = self;
+    picker.modalPresentationStyle = UIModalPresentationFullScreen;
+    if (@available(iOS 11.0, *)) {
+        picker.allowsMultipleSelection = YES;
     }
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -111,6 +116,51 @@
     HYDocumentItem *item = self.dataSource[indexPath.row];
     HYDocumentPreviewViewController *previewController = [[HYDocumentPreviewViewController alloc] initWithDocumentItem:item];
     [self.navigationController pushViewController:previewController animated:YES];
+}
+
+#pragma mark - UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
+    if (urls.count == 0) {
+        return;
+    }
+
+    [self hy_showLoadingWithMessage:@"正在导入文档..."];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSUInteger successCount = 0;
+        NSMutableArray<NSString *> *failedNames = [NSMutableArray array];
+
+        for (NSURL *url in urls) {
+            NSError *importError = nil;
+            BOOL success = [[HYFileManagerService sharedInstance] importDocumentAtURL:url error:&importError];
+            if (success) {
+                successCount += 1;
+            } else {
+                NSString *failedName = url.lastPathComponent ?: @"未知文件";
+                [failedNames addObject:failedName];
+                HYLog(@"Import failed for %@: %@", failedName, importError.localizedDescription);
+            }
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self hy_hideLoading];
+            [self hy_loadDocuments];
+
+            if (successCount > 0) {
+                [self hy_showToast:[NSString stringWithFormat:@"成功导入 %lu 个文件", (unsigned long)successCount]];
+            } else {
+                [self hy_showToast:@"导入失败，文件类型不支持或拷贝失败"];
+            }
+
+            if (failedNames.count > 0) {
+                HYLog(@"Failed imports: %@", failedNames);
+            }
+        });
+    });
+}
+
+- (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {
+    [self hy_showToast:@"已取消导入" duration:1.2];
 }
 
 @end

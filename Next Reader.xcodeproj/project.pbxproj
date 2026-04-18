@@ -11,6 +11,8 @@
 		8637741E2F9380A6001B34B5 /* HYFileManagerService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8637741D2F9380A6001B34B5 /* HYFileManagerService.m */; };
 		863774212F9380A6001B34B5 /* HYDocumentPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863774202F9380A6001B34B5 /* HYDocumentPreviewViewController.m */; };
 		863774232F9380A6001B34B5 /* HYDocumentListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 863774222F9380A6001B34B5 /* HYDocumentListCell.m */; };
+		863774292F9388E2001B34B5 /* HYTextReaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 863774282F9388E2001B34B5 /* HYTextReaderView.m */; };
+		8637742B2F9388E2001B34B5 /* HYMarkdownRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8637742A2F9388E2001B34B5 /* HYMarkdownRenderer.m */; };
 		86DDCABB2F91492200D186B2 /* HYBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCA9A2F91492200D186B2 /* HYBaseViewController.m */; };
 		86DDCABC2F91492200D186B2 /* HYDocumentListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCA9C2F91492200D186B2 /* HYDocumentListViewController.m */; };
 		86DDCABD2F91492200D186B2 /* HYMainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCA9E2F91492200D186B2 /* HYMainTabBarController.m */; };
@@ -48,6 +50,10 @@
 		8637741F2F9380A6001B34B5 /* HYDocumentListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYDocumentListCell.h; sourceTree = "<group>"; };
 		863774202F9380A6001B34B5 /* HYDocumentPreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYDocumentPreviewViewController.m; sourceTree = "<group>"; };
 		863774222F9380A6001B34B5 /* HYDocumentListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYDocumentListCell.m; sourceTree = "<group>"; };
+		863774262F9388A4001B34B5 /* HYTextReaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYTextReaderView.h; sourceTree = "<group>"; };
+		863774272F9388A4001B34B5 /* HYMarkdownRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMarkdownRenderer.h; sourceTree = "<group>"; };
+		863774282F9388E2001B34B5 /* HYTextReaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYTextReaderView.m; sourceTree = "<group>"; };
+		8637742A2F9388E2001B34B5 /* HYMarkdownRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMarkdownRenderer.m; sourceTree = "<group>"; };
 		86C79D4E2F8FEA670026E15C /* Next Reader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Next Reader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86DDCA992F91492200D186B2 /* HYBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYBaseViewController.h; sourceTree = "<group>"; };
 		86DDCA9A2F91492200D186B2 /* HYBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYBaseViewController.m; sourceTree = "<group>"; };
@@ -140,6 +146,8 @@
 			isa = PBXGroup;
 			children = (
 				863774172F93803C001B34B5 /* Controller */,
+				863774242F93889D001B34B5 /* View */,
+				863774252F93889D001B34B5 /* Utils */,
 			);
 			path = DocumentPreview;
 			sourceTree = "<group>";
@@ -169,6 +177,24 @@
 				863774202F9380A6001B34B5 /* HYDocumentPreviewViewController.m */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		863774242F93889D001B34B5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				863774262F9388A4001B34B5 /* HYTextReaderView.h */,
+				863774282F9388E2001B34B5 /* HYTextReaderView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		863774252F93889D001B34B5 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				863774272F9388A4001B34B5 /* HYMarkdownRenderer.h */,
+				8637742A2F9388E2001B34B5 /* HYMarkdownRenderer.m */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		86C79D452F8FEA670026E15C = {
@@ -405,6 +431,7 @@
 				86DDCABE2F91492200D186B2 /* HYSettingViewController.m in Sources */,
 				86DDCABF2F91492200D186B2 /* UIColor+HYExtension.m in Sources */,
 				86DDCAC02F91492200D186B2 /* AppDelegate.m in Sources */,
+				8637742B2F9388E2001B34B5 /* HYMarkdownRenderer.m in Sources */,
 				86DDCAC12F91492200D186B2 /* main.m in Sources */,
 				86DDCB242F91554900D186B2 /* HYBaseNavigationController.m in Sources */,
 				86DDCAC22F91492200D186B2 /* SceneDelegate.m in Sources */,
@@ -419,6 +446,7 @@
 				86DDCB132F914B0300D186B2 /* NSArray+MASAdditions.m in Sources */,
 				86DDCB142F914B0300D186B2 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				86DDCB1D2F914E3D00D186B2 /* HYToastView.m in Sources */,
+				863774292F9388E2001B34B5 /* HYTextReaderView.m in Sources */,
 				86DDCB152F914B0300D186B2 /* View+MASAdditions.m in Sources */,
 				863774232F9380A6001B34B5 /* HYDocumentListCell.m in Sources */,
 				86DDCB162F914B0300D186B2 /* ViewController+MASAdditions.m in Sources */,
