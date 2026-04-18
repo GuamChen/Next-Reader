@@ -108,11 +108,39 @@
 #define HY_SCREEN_HEIGHT            [UIScreen mainScreen].bounds.size.height
 #define HY_SCREEN_BOUNDS            [UIScreen mainScreen].bounds
 
+#define HY_KEY_WINDOW               ({\
+    UIWindow *hy_window = nil;\
+    if (@available(iOS 13.0, *)) {\
+        for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {\
+            if (![scene isKindOfClass:[UIWindowScene class]]) {\
+                continue;\
+            }\
+            UIWindowScene *windowScene = (UIWindowScene *)scene;\
+            for (UIWindow *window in windowScene.windows) {\
+                if (window.isKeyWindow) {\
+                    hy_window = window;\
+                    break;\
+                }\
+            }\
+            if (hy_window) {\
+                break;\
+            }\
+        }\
+    }\
+    if (!hy_window) {\
+        hy_window = [UIApplication sharedApplication].keyWindow;\
+    }\
+    if (!hy_window && [UIApplication sharedApplication].windows.count > 0) {\
+        hy_window = [UIApplication sharedApplication].windows.firstObject;\
+    }\
+    hy_window;\
+})
+
 #define HY_IS_IPHONE_X              ({\
     BOOL isPhoneX = NO;\
     if (@available(iOS 11.0, *)) {\
-        UIWindow *window = [UIApplication sharedApplication].delegate.window;\
-        isPhoneX = window.safeAreaInsets.bottom > 0;\
+        UIWindow *window = HY_KEY_WINDOW;\
+        isPhoneX = window.safeAreaInsets.bottom > 0.0f;\
     }\
     isPhoneX;\
 })

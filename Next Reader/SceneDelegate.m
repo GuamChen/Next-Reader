@@ -3,11 +3,9 @@
 //  Next Reader
 //
 //  Created by Gavin on 2026/4/15.
-///Users/gavin/Desktop/Next Reader/Next Reader/Base/Controller/HYDocumentListViewController.h
+//
 
 #import "SceneDelegate.h"
-#import "HYDocumentListViewController.h"
-#import "HYSettingViewController.h"
 #import "HYMainTabBarController.h"
 
 @interface SceneDelegate ()

@@ -48,18 +48,31 @@
     HYDocumentListViewController *documentVC = [[HYDocumentListViewController alloc] init];
     HYBaseNavigationController *documentNav = [[HYBaseNavigationController alloc] initWithRootViewController:documentVC];
     documentNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"文档"
-                                                           image:[UIImage systemImageNamed:@"book.pages"] //HY_IMAGE_ORIGINAL(@"tab_document_normal")
-                                                   selectedImage:[UIImage systemImageNamed:@"book.pages"]]; //HY_IMAGE_ORIGINAL(@"tab_document_selected")
+                                                           image:[self hy_tabBarImageNamed:@"tab_document_normal" systemName:@"doc.text"]
+                                                   selectedImage:[self hy_tabBarImageNamed:@"tab_document_selected" systemName:@"doc.text.fill"]];
     
     
     // 设置
     HYSettingViewController *settingsVC = [[HYSettingViewController alloc] init];
     HYBaseNavigationController *settingsNav = [[HYBaseNavigationController alloc] initWithRootViewController:settingsVC];
     settingsNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"我的"
-                                                           image:[UIImage systemImageNamed:@"person"] //HY_IMAGE_ORIGINAL(@"tab_settings_normal")
-                                                   selectedImage:[UIImage systemImageNamed:@"person"]]; //HY_IMAGE_ORIGINAL(@"tab_settings_selected")];
+                                                           image:[self hy_tabBarImageNamed:@"tab_settings_normal" systemName:@"person"]
+                                                   selectedImage:[self hy_tabBarImageNamed:@"tab_settings_selected" systemName:@"person.fill"]];
     
     self.viewControllers = @[documentNav, settingsNav];
+}
+
+- (UIImage *)hy_tabBarImageNamed:(NSString *)assetName systemName:(NSString *)systemName {
+    UIImage *image = HY_IMAGE_ORIGINAL(assetName);
+    if (image) {
+        return image;
+    }
+
+    if (@available(iOS 13.0, *)) {
+        return [UIImage systemImageNamed:systemName];
+    }
+
+    return nil;
 }
 
 @end

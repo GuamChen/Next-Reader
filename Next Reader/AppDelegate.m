@@ -22,7 +22,8 @@
         // iOS 13+ 使用 SceneDelegate 处理
     } else {
         // iOS 12 及以下，手动创建 window
-        self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        UIScreen *screen = [UIScreen screens].firstObject;
+        self.window = [[UIWindow alloc] initWithFrame:screen.bounds];
         self.window.backgroundColor = HY_COLOR_BG_WHITE;
         
         HYMainTabBarController *tabBarController = [[HYMainTabBarController alloc] init];
@@ -74,7 +75,5 @@
         }];
     }
     
-    // 全局隐藏系统导航栏（因为我们使用自定义导航栏）
-    [[UINavigationBar appearance] setHidden:YES];
 }
 @end
