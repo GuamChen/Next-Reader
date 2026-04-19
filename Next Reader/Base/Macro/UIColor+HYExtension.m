@@ -15,6 +15,49 @@
 
 #import "UIColor+HYExtension.h"
 
+@implementation HYUIBuildFactory
+
++ (UIView *)viewWithBackgroundColor:(UIColor *)backgroundColor {
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = backgroundColor;
+    return view;
+}
+
++ (UIView *)separatorLineWithColor:(UIColor *)color {
+    return [self viewWithBackgroundColor:color];
+}
+
++ (UILabel *)labelWithFont:(UIFont *)font
+                 textColor:(UIColor *)textColor
+                 alignment:(NSTextAlignment)alignment {
+    UILabel *label = [[UILabel alloc] init];
+    label.font = font;
+    label.textColor = textColor;
+    label.textAlignment = alignment;
+    return label;
+}
+
++ (UIButton *)buttonWithTitle:(NSString *)title
+                   titleColor:(UIColor *)titleColor
+                         font:(UIFont *)font
+                       target:(id)target
+                       action:(SEL)action {
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:title forState:UIControlStateNormal];
+    if (titleColor != nil) {
+        [button setTitleColor:titleColor forState:UIControlStateNormal];
+    }
+    if (font != nil) {
+        button.titleLabel.font = font;
+    }
+    if (target != nil && action != NULL) {
+        [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    }
+    return button;
+}
+
+@end
+
 @implementation UIColor (HYExtension)
 
 #pragma mark - 十六进制字符串转颜色

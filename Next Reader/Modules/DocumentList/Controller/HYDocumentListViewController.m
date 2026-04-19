@@ -29,8 +29,8 @@
     [super viewDidLoad];
 
     [self hy_setNavTitle:@"我的文档"];
-    [self hy_setRightButtonWithTitle:@"导入"
-                               image:nil
+    [self hy_setRightButtonWithTitle:nil // @"导入"
+                               image:@"nav_import"
                               target:self
                               action:@selector(importDocumentTapped)];
 

@@ -140,31 +140,34 @@
     }
     
     // 创建导航栏容器
-    self.hy_navigationBar = [[UIView alloc] init];
-    self.hy_navigationBar.backgroundColor = self.hy_navBarBackgroundColor;
+    self.hy_navigationBar = [HYUIBuildFactory viewWithBackgroundColor:self.hy_navBarBackgroundColor];
     [self.view addSubview:self.hy_navigationBar];
     
     // 创建标题
-    self.hy_titleLabel = [[UILabel alloc] init];
-    self.hy_titleLabel.font = HY_FONT_MEDIUM(18);
-    self.hy_titleLabel.textColor = self.hy_navTitleColor;
-    self.hy_titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.hy_titleLabel = [HYUIBuildFactory labelWithFont:HY_FONT_MEDIUM(18)
+                                               textColor:self.hy_navTitleColor
+                                               alignment:NSTextAlignmentCenter];
     self.hy_titleLabel.text = self.title;
     [self.hy_navigationBar addSubview:self.hy_titleLabel];
     
     // 创建左侧按钮
-    self.hy_leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.hy_leftButton addTarget:self action:@selector(hy_leftButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.hy_leftButton = [HYUIBuildFactory buttonWithTitle:nil
+                                                titleColor:nil
+                                                      font:nil
+                                                    target:self
+                                                    action:@selector(hy_leftButtonAction:)];
     [self.hy_navigationBar addSubview:self.hy_leftButton];
     
     // 创建右侧按钮
-    self.hy_rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.hy_rightButton addTarget:self action:@selector(hy_rightButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.hy_rightButton = [HYUIBuildFactory buttonWithTitle:nil
+                                                 titleColor:nil
+                                                       font:nil
+                                                     target:self
+                                                     action:@selector(hy_rightButtonAction:)];
     [self.hy_navigationBar addSubview:self.hy_rightButton];
     
     // 创建分割线
-    self.hy_navSeparatorLine = [[UIView alloc] init];
-    self.hy_navSeparatorLine.backgroundColor = HY_COLOR_SEPARATOR;
+    self.hy_navSeparatorLine = [HYUIBuildFactory separatorLineWithColor:HY_COLOR_SEPARATOR];
     self.hy_navSeparatorLine.hidden = self.hy_hideNavSeparator;
     [self.hy_navigationBar addSubview:self.hy_navSeparatorLine];
     
@@ -175,8 +178,7 @@
 }
 
 - (void)hy_setupContentView {
-    self.hy_contentView = [[UIView alloc] init];
-    self.hy_contentView.backgroundColor = [UIColor clearColor];
+    self.hy_contentView = [HYUIBuildFactory viewWithBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:self.hy_contentView];
 }
 
@@ -204,14 +206,22 @@
         }];
         
         [self.hy_leftButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.hy_navigationBar).offset(HY_MARGIN_MD);
-            make.bottom.equalTo(self.hy_navigationBar).offset(-8);
+            make.left.equalTo(self.hy_navigationBar).offset(HY_MARGIN_SM);
+            if (self.hy_titleLabel && self.hy_titleLabel.hidden != YES) {
+                make.centerY.equalTo(self.hy_titleLabel.mas_centerY);
+            }else{
+                make.bottom.equalTo(self.hy_navigationBar.mas_bottom).offset(0);
+            }
             make.width.height.mas_equalTo(44);
         }];
         
         [self.hy_rightButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.hy_navigationBar).offset(-HY_MARGIN_MD);
-            make.bottom.equalTo(self.hy_navigationBar).offset(-8);
+            make.right.equalTo(self.hy_navigationBar).offset(-HY_MARGIN_SM);
+            if (self.hy_titleLabel && self.hy_titleLabel.hidden != YES) {
+                make.centerY.equalTo(self.hy_titleLabel.mas_centerY);
+            }else{
+                make.bottom.equalTo(self.hy_navigationBar.mas_bottom).offset(0);
+            }
             make.width.height.mas_equalTo(44);
         }];
         
@@ -308,12 +318,38 @@
                              image:(NSString *)imageName
                             target:(id)target
                             action:(SEL)action {
+    [self.hy_rightButton setImage:nil forState:UIControlStateNormal];
     [self.hy_rightButton setTitle:title forState:UIControlStateNormal];
     [self.hy_rightButton setTitleColor:HY_COLOR_THEME forState:UIControlStateNormal];
     self.hy_rightButton.titleLabel.font = HY_FONT(HY_FONT_SIZE_BODY);
     
     if (imageName) {
-        [self.hy_rightButton setImage:HY_IMAGE_ORIGINAL(imageName) forState:UIControlStateNormal];
+        UIImage *buttonImage = HY_IMAGE_ORIGINAL(imageName);
+        if (!buttonImage) {
+            if (@available(iOS 13.0, *)) {
+                NSString *systemName = nil;
+                if ([imageName isEqualToString:@"nav_import"]) {
+                    systemName = @"square.and.arrow.down";
+                } else if ([imageName isEqualToString:@"nav_close"]) {
+                    systemName = @"xmark";
+                } else if ([imageName isEqualToString:@"nav_more"]) {
+                    systemName = @"ellipsis.circle";
+                }
+                if (systemName.length > 0) {
+                    buttonImage = [UIImage systemImageNamed:systemName];
+                }
+            }
+        }
+        [self.hy_rightButton setImage:buttonImage forState:UIControlStateNormal];
+        self.hy_rightButton.tintColor = HY_COLOR_THEME;
+    }
+
+    if (title.length > 0 && imageName.length > 0) {
+        self.hy_rightButton.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+        self.hy_rightButton.imageEdgeInsets = UIEdgeInsetsMake(0, 8, 0, -8);
+    } else {
+        self.hy_rightButton.semanticContentAttribute = UISemanticContentAttributeUnspecified;
+        self.hy_rightButton.imageEdgeInsets = UIEdgeInsetsZero;
     }
     
     if (target && action) {

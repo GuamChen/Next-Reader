@@ -45,8 +45,7 @@ static CGFloat const HYTextReaderDefaultFontSize = 15.0f;
 - (void)hy_setupSubviews {
     self.backgroundColor = HY_COLOR_BG_WHITE;
 
-    self.toolbarView = [[UIView alloc] init];
-    self.toolbarView.backgroundColor = HY_COLOR_BG_LIGHT_GRAY;
+    self.toolbarView = [HYUIBuildFactory viewWithBackgroundColor:HY_COLOR_BG_LIGHT_GRAY];
     [self addSubview:self.toolbarView];
 
     self.searchBar = [[UISearchBar alloc] init];
@@ -133,13 +132,14 @@ static CGFloat const HYTextReaderDefaultFontSize = 15.0f;
 }
 
 - (UIButton *)hy_fontButtonWithTitle:(NSString *)title {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *button = [HYUIBuildFactory buttonWithTitle:title
+                                              titleColor:HY_COLOR_TEXT_PRIMARY
+                                                    font:HY_FONT_MEDIUM(14.0f)
+                                                  target:nil
+                                                  action:nil];
     button.layer.cornerRadius = HY_CORNER_RADIUS_SM;
     button.layer.borderWidth = 1.0f;
     button.layer.borderColor = HY_COLOR_SEPARATOR.CGColor;
-    [button setTitle:title forState:UIControlStateNormal];
-    [button setTitleColor:HY_COLOR_TEXT_PRIMARY forState:UIControlStateNormal];
-    button.titleLabel.font = HY_FONT_MEDIUM(14.0f);
     return button;
 }
 

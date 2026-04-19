@@ -54,8 +54,7 @@
     [[HYDocumentCacheManager sharedInstance] cachePreviewMetaForDocument:self.documentItem];
     [[HYDocumentCacheManager sharedInstance] cacheRecentPreviewForDocument:self.documentItem];
 
-    self.previewContainerView = [[UIView alloc] init];
-    self.previewContainerView.backgroundColor = HY_COLOR_BG_WHITE;
+    self.previewContainerView = [HYUIBuildFactory viewWithBackgroundColor:HY_COLOR_BG_WHITE];
     [self.hy_contentView addSubview:self.previewContainerView];
 
     [self.previewContainerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -271,12 +270,10 @@
         return;
     }
 
-    self.pdfToolbar = [[UIView alloc] init];
-    self.pdfToolbar.backgroundColor = HY_COLOR_BG_WHITE;
+    self.pdfToolbar = [HYUIBuildFactory viewWithBackgroundColor:HY_COLOR_BG_WHITE];
     [self.hy_contentView addSubview:self.pdfToolbar];
 
-    UIView *separatorLine = [[UIView alloc] init];
-    separatorLine.backgroundColor = HY_COLOR_SEPARATOR;
+    UIView *separatorLine = [HYUIBuildFactory separatorLineWithColor:HY_COLOR_SEPARATOR];
     [self.pdfToolbar addSubview:separatorLine];
 
     UIButton *previousButton = [self hy_toolbarButtonWithTitle:@"上一页" action:@selector(hy_goToPreviousPDFPage)];
@@ -286,10 +283,9 @@
     [self.pdfToolbar addSubview:nextButton];
     [self.pdfToolbar addSubview:moreButton];
 
-    self.pdfProgressLabel = [[UILabel alloc] init];
-    self.pdfProgressLabel.font = HY_FONT_MEDIUM(14.0f);
-    self.pdfProgressLabel.textColor = HY_COLOR_TEXT_PRIMARY;
-    self.pdfProgressLabel.textAlignment = NSTextAlignmentCenter;
+    self.pdfProgressLabel = [HYUIBuildFactory labelWithFont:HY_FONT_MEDIUM(14.0f)
+                                                  textColor:HY_COLOR_TEXT_PRIMARY
+                                                  alignment:NSTextAlignmentCenter];
     [self.pdfToolbar addSubview:self.pdfProgressLabel];
 
     [self.pdfToolbar mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -427,12 +423,10 @@
         return;
     }
 
-    self.quickLookToolbar = [[UIView alloc] init];
-    self.quickLookToolbar.backgroundColor = HY_COLOR_BG_WHITE;
+    self.quickLookToolbar = [HYUIBuildFactory viewWithBackgroundColor:HY_COLOR_BG_WHITE];
     [self.hy_contentView addSubview:self.quickLookToolbar];
 
-    UIView *separatorLine = [[UIView alloc] init];
-    separatorLine.backgroundColor = HY_COLOR_SEPARATOR;
+    UIView *separatorLine = [HYUIBuildFactory separatorLineWithColor:HY_COLOR_SEPARATOR];
     [self.quickLookToolbar addSubview:separatorLine];
 
     UIButton *shareButton = [self hy_toolbarButtonWithTitle:@"分享" action:@selector(hy_shareDocument)];
@@ -461,12 +455,11 @@
 }
 
 - (UIButton *)hy_toolbarButtonWithTitle:(NSString *)title action:(SEL)action {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setTitle:title forState:UIControlStateNormal];
-    [button setTitleColor:HY_COLOR_THEME forState:UIControlStateNormal];
-    button.titleLabel.font = HY_FONT_MEDIUM(15.0f);
-    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    return button;
+    return [HYUIBuildFactory buttonWithTitle:title
+                                  titleColor:HY_COLOR_THEME
+                                        font:HY_FONT_MEDIUM(15.0f)
+                                      target:self
+                                      action:action];
 }
 
 - (void)hy_hideQuickLookToolbar {

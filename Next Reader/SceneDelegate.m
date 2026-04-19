@@ -6,6 +6,7 @@
 //
 
 #import "SceneDelegate.h"
+#import "HYExternalDocumentRouter.h"
 #import "HYMainTabBarController.h"
 
 @interface SceneDelegate ()
@@ -28,6 +29,11 @@
     HYMainTabBarController *tabBarController = [[HYMainTabBarController alloc] init];
     self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];
+
+    UIOpenURLContext *openURLContext = connectionOptions.URLContexts.allObjects.firstObject;
+    if (openURLContext.URL != nil) {
+        [[HYExternalDocumentRouter sharedInstance] handleOpenURL:openURLContext.URL options:nil];
+    }
 }
 
 - (void)sceneDidDisconnect:(UIScene *)scene API_AVAILABLE(ios(13.0)) {
@@ -48,6 +54,14 @@
 
 - (void)sceneDidEnterBackground:(UIScene *)scene API_AVAILABLE(ios(13.0)) {
     // 场景进入后台时的清理工作
+}
+
+- (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts API_AVAILABLE(ios(13.0)) {
+    UIOpenURLContext *openURLContext = URLContexts.allObjects.firstObject;
+    if (openURLContext.URL == nil) {
+        return;
+    }
+    [[HYExternalDocumentRouter sharedInstance] handleOpenURL:openURLContext.URL options:nil];
 }
 
 @end

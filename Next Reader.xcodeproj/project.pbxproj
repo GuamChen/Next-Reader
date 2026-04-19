@@ -17,6 +17,7 @@
 		863774342F94A8E3001B34B5 /* HYDocumentImportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 863774332F94A8E3001B34B5 /* HYDocumentImportManager.m */; };
 		863774392F94AC77001B34B5 /* HYAsyncTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 863774382F94AC77001B34B5 /* HYAsyncTaskManager.m */; };
 		8637743C2F94AC77001B34B5 /* HYDocumentCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8637743B2F94AC77001B34B5 /* HYDocumentCacheManager.m */; };
+		8637743F2F94B6B9001B34B5 /* HYExternalDocumentRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8637743E2F94B6B9001B34B5 /* HYExternalDocumentRouter.m */; };
 		86DDCABB2F91492200D186B2 /* HYBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCA9A2F91492200D186B2 /* HYBaseViewController.m */; };
 		86DDCABD2F91492200D186B2 /* HYMainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCA9E2F91492200D186B2 /* HYMainTabBarController.m */; };
 		86DDCABE2F91492200D186B2 /* HYSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCAA02F91492200D186B2 /* HYSettingViewController.m */; };
@@ -65,6 +66,8 @@
 		863774382F94AC77001B34B5 /* HYAsyncTaskManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYAsyncTaskManager.m; sourceTree = "<group>"; };
 		8637743A2F94AC77001B34B5 /* HYDocumentCacheManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYDocumentCacheManager.h; sourceTree = "<group>"; };
 		8637743B2F94AC77001B34B5 /* HYDocumentCacheManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYDocumentCacheManager.m; sourceTree = "<group>"; };
+		8637743D2F94B6B9001B34B5 /* HYExternalDocumentRouter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYExternalDocumentRouter.h; sourceTree = "<group>"; };
+		8637743E2F94B6B9001B34B5 /* HYExternalDocumentRouter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYExternalDocumentRouter.m; sourceTree = "<group>"; };
 		86C79D4E2F8FEA670026E15C /* Next Reader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Next Reader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86DDCA992F91492200D186B2 /* HYBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYBaseViewController.h; sourceTree = "<group>"; };
 		86DDCA9A2F91492200D186B2 /* HYBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYBaseViewController.m; sourceTree = "<group>"; };
@@ -320,6 +323,8 @@
 		86DDCAAA2F91492200D186B2 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				8637743D2F94B6B9001B34B5 /* HYExternalDocumentRouter.h */,
+				8637743E2F94B6B9001B34B5 /* HYExternalDocumentRouter.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -491,6 +496,7 @@
 				863774302F9395F2001B34B5 /* HYDocumentListViewController.m in Sources */,
 				86DDCB102F914B0300D186B2 /* MASLayoutConstraint.m in Sources */,
 				86DDCB112F914B0300D186B2 /* MASViewAttribute.m in Sources */,
+				8637743F2F94B6B9001B34B5 /* HYExternalDocumentRouter.m in Sources */,
 				86DDCB122F914B0300D186B2 /* MASViewConstraint.m in Sources */,
 				86DDCB132F914B0300D186B2 /* NSArray+MASAdditions.m in Sources */,
 				86DDCB142F914B0300D186B2 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,

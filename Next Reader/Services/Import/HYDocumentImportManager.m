@@ -26,12 +26,15 @@
     self.presentingViewController = viewController;
 
     NSArray<NSString *> *documentTypes = @[
-        (NSString *)kUTTypeData,
         @"com.adobe.pdf",
         @"org.openxmlformats.wordprocessingml.document",
+        @"com.microsoft.word.doc",
         @"org.openxmlformats.spreadsheetml.sheet",
+        @"com.microsoft.excel.xls",
         @"org.openxmlformats.presentationml.presentation",
+        @"com.microsoft.powerpoint.ppt",
         (NSString *)kUTTypePlainText,
+        @"com.nextreader.markdown",
         @"net.daringfireball.markdown",
     ];
 

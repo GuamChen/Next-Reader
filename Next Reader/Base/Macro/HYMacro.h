@@ -217,3 +217,20 @@
      [(str) isKindOfClass:[NSNull class]] || \
      [(str) length] == 0 || \
      [[(str) stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0)
+
+@interface HYUIBuildFactory : NSObject
+
++ (UIView *)viewWithBackgroundColor:(nullable UIColor *)backgroundColor;
++ (UIView *)separatorLineWithColor:(nullable UIColor *)color;
+
++ (UILabel *)labelWithFont:(UIFont *)font
+                 textColor:(UIColor *)textColor
+                 alignment:(NSTextAlignment)alignment;
+
++ (UIButton *)buttonWithTitle:(nullable NSString *)title
+                   titleColor:(nullable UIColor *)titleColor
+                         font:(nullable UIFont *)font
+                       target:(nullable id)target
+                       action:(nullable SEL)action;
+
+@end
