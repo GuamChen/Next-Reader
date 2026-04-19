@@ -17,6 +17,7 @@
 
 @interface HYMainTabBarController () <UITabBarControllerDelegate>
 
+// 自定义 tabbar 只负责 UI 展示，真正的页面切换仍然由 UITabBarController 维护。
 @property (nonatomic, strong) HYCustomTabBarView *customTabBarView;
 @property (nonatomic, strong) NSArray<NSDictionary<NSString *, id> *> *customTabItems;
 
@@ -28,6 +29,7 @@
     [super viewDidLoad];
 
     self.delegate = self;
+    // 先准备页面，再把系统 tabbar 变透明，最后叠加自定义 tabbar。
     [self setupChildViewControllers];
     [self setupTabBarAppearance];
     [self setupCustomTabBar];
@@ -39,7 +41,14 @@
 
     self.tabBar.clipsToBounds = NO;
     self.tabBar.layer.masksToBounds = NO;
+    // 系统 tabBar 的按钮仍然存在，这里只保留它的容器能力，把默认按钮隐藏掉。
+    for (UIView *subview in self.tabBar.subviews) {
+        if ([subview isKindOfClass:UIControl.class]) {
+            subview.hidden = YES;
+        }
+    }
 
+    // 自定义 tabbar 比系统 tabbar 更高，因为需要给上浮按钮预留可见空间。
     CGFloat customHeight = CGRectGetHeight(self.tabBar.bounds) + HYCustomTabBarFloatingHeight;
     self.customTabBarView.frame = CGRectMake(0.0f,
                                              CGRectGetMinY(self.tabBar.frame) - HYCustomTabBarFloatingHeight,
@@ -47,10 +56,12 @@
                                              customHeight);
     self.customTabBarView.safeBottomInset = self.view.safeAreaInsets.bottom;
     [self.customTabBarView setNeedsLayout];
+    [self.view bringSubviewToFront:self.customTabBarView];
 }
 
 - (void)setupTabBarAppearance {
     self.view.backgroundColor = [UIColor hy_colorWithHex:0xEFF2F7];
+    // 系统 tabBar 不再承担任何视觉职责，所有视觉由 HYCustomTabBarView 绘制。
     self.tabBar.translucent = YES;
     self.tabBar.backgroundImage = [UIImage new];
     self.tabBar.shadowImage = [UIImage new];
@@ -58,6 +69,7 @@
     self.tabBar.barTintColor = UIColor.clearColor;
     self.tabBar.tintColor = UIColor.clearColor;
     self.tabBar.unselectedItemTintColor = UIColor.clearColor;
+    self.tabBar.opaque = NO;
 
     if (@available(iOS 13.0, *)) {
         UITabBarAppearance *appearance = [[UITabBarAppearance alloc] init];
@@ -105,6 +117,7 @@
 
     self.viewControllers = @[documentNav, placeholderNav, settingsNav];
 
+    // 自定义 tabbar 的 item 数据源。controller 和 item 视觉故意分开，避免把业务和 UI 写死在一起。
     self.customTabItems = @[
         @{@"title": @"文档",
           @"normalImage": [self hy_tabBarIconNamed:@"tab_document_normal" systemName:@"doc.text"],
@@ -128,6 +141,8 @@
         if (!strongSelf || index >= strongSelf.viewControllers.count) {
             return;
         }
+        // 点击自定义 item 后，只改 selectedIndex；
+        // UITabBarController 会接管页面切换，UI 状态再同步回自定义 tabbar。
         strongSelf.selectedIndex = index;
         [strongSelf.customTabBarView setSelectedIndex:index animated:YES];
     };
@@ -164,6 +179,7 @@
 #pragma mark - UITabBarControllerDelegate
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    // 兜底同步：无论是点击自定义 tab，还是外部代码修改 selectedIndex，都统一刷新 UI 状态。
     [self.customTabBarView setSelectedIndex:self.selectedIndex animated:YES];
 }
 

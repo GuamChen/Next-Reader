@@ -262,8 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				863774482F94DC2C001B34B5 /* View */,
-				863774442F94DC14001B34B5 /* HYMainTabBarController.h */,
-				863774452F94DC14001B34B5 /* HYMainTabBarController.m */,
+				863774522F94E4F3001B34B5 /* Controller */,
 			);
 			path = TabbarController;
 			sourceTree = "<group>";
@@ -279,6 +278,15 @@
 				863774502F94DD0E001B34B5 /* HYCustomTabBarView.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		863774522F94E4F3001B34B5 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				863774442F94DC14001B34B5 /* HYMainTabBarController.h */,
+				863774452F94DC14001B34B5 /* HYMainTabBarController.m */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		86C79D452F8FEA670026E15C = {
