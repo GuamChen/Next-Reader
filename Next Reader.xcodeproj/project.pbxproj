@@ -18,8 +18,12 @@
 		863774392F94AC77001B34B5 /* HYAsyncTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 863774382F94AC77001B34B5 /* HYAsyncTaskManager.m */; };
 		8637743C2F94AC77001B34B5 /* HYDocumentCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8637743B2F94AC77001B34B5 /* HYDocumentCacheManager.m */; };
 		8637743F2F94B6B9001B34B5 /* HYExternalDocumentRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8637743E2F94B6B9001B34B5 /* HYExternalDocumentRouter.m */; };
+		863774422F94DB87001B34B5 /* HYTabPlaceholderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863774412F94DB87001B34B5 /* HYTabPlaceholderViewController.m */; };
+		863774472F94DC14001B34B5 /* HYMainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863774452F94DC14001B34B5 /* HYMainTabBarController.m */; };
+		8637744B2F94DC3C001B34B5 /* HYCustomTabBarBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8637744A2F94DC3C001B34B5 /* HYCustomTabBarBackgroundView.m */; };
+		8637744E2F94DCBA001B34B5 /* HYCustomTabBarItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8637744D2F94DCBA001B34B5 /* HYCustomTabBarItemView.m */; };
+		863774512F94DD0E001B34B5 /* HYCustomTabBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 863774502F94DD0E001B34B5 /* HYCustomTabBarView.m */; };
 		86DDCABB2F91492200D186B2 /* HYBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCA9A2F91492200D186B2 /* HYBaseViewController.m */; };
-		86DDCABD2F91492200D186B2 /* HYMainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCA9E2F91492200D186B2 /* HYMainTabBarController.m */; };
 		86DDCABE2F91492200D186B2 /* HYSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCAA02F91492200D186B2 /* HYSettingViewController.m */; };
 		86DDCABF2F91492200D186B2 /* UIColor+HYExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCAA52F91492200D186B2 /* UIColor+HYExtension.m */; };
 		86DDCAC02F91492200D186B2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCAAE2F91492200D186B2 /* AppDelegate.m */; };
@@ -68,11 +72,19 @@
 		8637743B2F94AC77001B34B5 /* HYDocumentCacheManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYDocumentCacheManager.m; sourceTree = "<group>"; };
 		8637743D2F94B6B9001B34B5 /* HYExternalDocumentRouter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYExternalDocumentRouter.h; sourceTree = "<group>"; };
 		8637743E2F94B6B9001B34B5 /* HYExternalDocumentRouter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYExternalDocumentRouter.m; sourceTree = "<group>"; };
+		863774402F94DB87001B34B5 /* HYTabPlaceholderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYTabPlaceholderViewController.h; sourceTree = "<group>"; };
+		863774412F94DB87001B34B5 /* HYTabPlaceholderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYTabPlaceholderViewController.m; sourceTree = "<group>"; };
+		863774442F94DC14001B34B5 /* HYMainTabBarController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMainTabBarController.h; sourceTree = "<group>"; };
+		863774452F94DC14001B34B5 /* HYMainTabBarController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMainTabBarController.m; sourceTree = "<group>"; };
+		863774492F94DC3C001B34B5 /* HYCustomTabBarBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYCustomTabBarBackgroundView.h; sourceTree = "<group>"; };
+		8637744A2F94DC3C001B34B5 /* HYCustomTabBarBackgroundView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYCustomTabBarBackgroundView.m; sourceTree = "<group>"; };
+		8637744C2F94DCBA001B34B5 /* HYCustomTabBarItemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYCustomTabBarItemView.h; sourceTree = "<group>"; };
+		8637744D2F94DCBA001B34B5 /* HYCustomTabBarItemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYCustomTabBarItemView.m; sourceTree = "<group>"; };
+		8637744F2F94DD0E001B34B5 /* HYCustomTabBarView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYCustomTabBarView.h; sourceTree = "<group>"; };
+		863774502F94DD0E001B34B5 /* HYCustomTabBarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYCustomTabBarView.m; sourceTree = "<group>"; };
 		86C79D4E2F8FEA670026E15C /* Next Reader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Next Reader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86DDCA992F91492200D186B2 /* HYBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYBaseViewController.h; sourceTree = "<group>"; };
 		86DDCA9A2F91492200D186B2 /* HYBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYBaseViewController.m; sourceTree = "<group>"; };
-		86DDCA9D2F91492200D186B2 /* HYMainTabBarController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMainTabBarController.h; sourceTree = "<group>"; };
-		86DDCA9E2F91492200D186B2 /* HYMainTabBarController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMainTabBarController.m; sourceTree = "<group>"; };
 		86DDCA9F2F91492200D186B2 /* HYSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYSettingViewController.h; sourceTree = "<group>"; };
 		86DDCAA02F91492200D186B2 /* HYSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYSettingViewController.m; sourceTree = "<group>"; };
 		86DDCAA22F91492200D186B2 /* HYMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMacro.h; sourceTree = "<group>"; };
@@ -246,6 +258,29 @@
 			path = Cache;
 			sourceTree = "<group>";
 		};
+		863774462F94DC14001B34B5 /* TabbarController */ = {
+			isa = PBXGroup;
+			children = (
+				863774482F94DC2C001B34B5 /* View */,
+				863774442F94DC14001B34B5 /* HYMainTabBarController.h */,
+				863774452F94DC14001B34B5 /* HYMainTabBarController.m */,
+			);
+			path = TabbarController;
+			sourceTree = "<group>";
+		};
+		863774482F94DC2C001B34B5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				863774492F94DC3C001B34B5 /* HYCustomTabBarBackgroundView.h */,
+				8637744A2F94DC3C001B34B5 /* HYCustomTabBarBackgroundView.m */,
+				8637744C2F94DCBA001B34B5 /* HYCustomTabBarItemView.h */,
+				8637744D2F94DCBA001B34B5 /* HYCustomTabBarItemView.m */,
+				8637744F2F94DD0E001B34B5 /* HYCustomTabBarView.h */,
+				863774502F94DD0E001B34B5 /* HYCustomTabBarView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		86C79D452F8FEA670026E15C = {
 			isa = PBXGroup;
 			children = (
@@ -268,8 +303,6 @@
 			children = (
 				86DDCA992F91492200D186B2 /* HYBaseViewController.h */,
 				86DDCA9A2F91492200D186B2 /* HYBaseViewController.m */,
-				86DDCA9D2F91492200D186B2 /* HYMainTabBarController.h */,
-				86DDCA9E2F91492200D186B2 /* HYMainTabBarController.m */,
 				86DDCB222F91553B00D186B2 /* HYBaseNavigationController.h */,
 				86DDCB232F91553E00D186B2 /* HYBaseNavigationController.m */,
 				86DDCA9F2F91492200D186B2 /* HYSettingViewController.h */,
@@ -314,8 +347,11 @@
 		86DDCAA92F91492200D186B2 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				863774462F94DC14001B34B5 /* TabbarController */,
 				863774132F938038001B34B5 /* DocumentList */,
 				863774142F938038001B34B5 /* DocumentPreview */,
+				863774402F94DB87001B34B5 /* HYTabPlaceholderViewController.h */,
+				863774412F94DB87001B34B5 /* HYTabPlaceholderViewController.m */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -477,9 +513,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				86DDCABB2F91492200D186B2 /* HYBaseViewController.m in Sources */,
+				8637744E2F94DCBA001B34B5 /* HYCustomTabBarItemView.m in Sources */,
+				863774472F94DC14001B34B5 /* HYMainTabBarController.m in Sources */,
 				8637741A2F938062001B34B5 /* HYDocumentItem.m in Sources */,
 				8637743C2F94AC77001B34B5 /* HYDocumentCacheManager.m in Sources */,
-				86DDCABD2F91492200D186B2 /* HYMainTabBarController.m in Sources */,
 				86DDCABE2F91492200D186B2 /* HYSettingViewController.m in Sources */,
 				863774342F94A8E3001B34B5 /* HYDocumentImportManager.m in Sources */,
 				86DDCABF2F91492200D186B2 /* UIColor+HYExtension.m in Sources */,
@@ -498,7 +535,9 @@
 				86DDCB112F914B0300D186B2 /* MASViewAttribute.m in Sources */,
 				8637743F2F94B6B9001B34B5 /* HYExternalDocumentRouter.m in Sources */,
 				86DDCB122F914B0300D186B2 /* MASViewConstraint.m in Sources */,
+				863774422F94DB87001B34B5 /* HYTabPlaceholderViewController.m in Sources */,
 				86DDCB132F914B0300D186B2 /* NSArray+MASAdditions.m in Sources */,
+				863774512F94DD0E001B34B5 /* HYCustomTabBarView.m in Sources */,
 				86DDCB142F914B0300D186B2 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				86DDCB1D2F914E3D00D186B2 /* HYToastView.m in Sources */,
 				863774292F9388E2001B34B5 /* HYTextReaderView.m in Sources */,
@@ -506,6 +545,7 @@
 				863774392F94AC77001B34B5 /* HYAsyncTaskManager.m in Sources */,
 				863774232F9380A6001B34B5 /* HYDocumentListCell.m in Sources */,
 				86DDCB162F914B0300D186B2 /* ViewController+MASAdditions.m in Sources */,
+				8637744B2F94DC3C001B34B5 /* HYCustomTabBarBackgroundView.m in Sources */,
 				863774212F9380A6001B34B5 /* HYDocumentPreviewViewController.m in Sources */,
 				8637741E2F9380A6001B34B5 /* HYFileManagerService.m in Sources */,
 				86DDCB1A2F914E1B00D186B2 /* HYLoadingView.m in Sources */,
