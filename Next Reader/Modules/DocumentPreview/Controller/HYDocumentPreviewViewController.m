@@ -12,6 +12,8 @@
 #import <WebKit/WebKit.h>
 #import <UIKit/UIKit.h>
 
+#import "HYAsyncTaskManager.h"
+#import "HYDocumentCacheManager.h"
 #import "HYDocumentItem.h"
 #import "HYFileManagerService.h"
 #import "HYMarkdownRenderer.h"
@@ -48,6 +50,9 @@
     [self hy_setNavTitle:self.documentItem.fileName];
     [self hy_setRightButtonWithTitle:nil image:nil target:nil action:nil];
     [self hy_hideRightButton];
+    [self hy_showLoadingWithMessage:@"正在准备预览..."];
+    [[HYDocumentCacheManager sharedInstance] cachePreviewMetaForDocument:self.documentItem];
+    [[HYDocumentCacheManager sharedInstance] cacheRecentPreviewForDocument:self.documentItem];
 
     self.previewContainerView = [[UIView alloc] init];
     self.previewContainerView.backgroundColor = HY_COLOR_BG_WHITE;
@@ -123,6 +128,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hy_pdfPageChanged:) name:PDFViewPageChangedNotification object:self.pdfView];
     [self hy_restorePDFProgress];
     [self hy_updatePDFProgressUI];
+    [self hy_hideLoading];
 }
 
 - (void)hy_showQuickLookPreview {
@@ -143,6 +149,7 @@
 
     [self.quickLookController didMoveToParentViewController:self];
     [self.quickLookController reloadData];
+    [self hy_hideLoading];
 }
 
 - (void)hy_showMarkdownPreview {
@@ -150,28 +157,42 @@
     [self hy_hideQuickLookToolbar];
     [self hy_hidePDFToolbar];
 
-    NSError *readError = nil;
-    NSString *markdown = [NSString stringWithContentsOfFile:self.documentItem.filePath
-                                                   encoding:NSUTF8StringEncoding
-                                                      error:&readError];
-    if (markdown == nil) {
-        [self hy_showEmptyViewWithImage:nil title:@"Markdown 解析失败" message:readError.localizedDescription ?: @"无法读取当前文件内容。"];
-        return;
-    }
+    HY_WEAK_SELF
+    dispatch_async([HYAsyncTaskManager sharedInstance].parseQueue, ^{
+        @autoreleasepool {
+            NSError *readError = nil;
+            NSString *markdown = [NSString stringWithContentsOfFile:self.documentItem.filePath
+                                                           encoding:NSUTF8StringEncoding
+                                                              error:&readError];
+            NSString *htmlString = markdown != nil ? [HYMarkdownRenderer HTMLStringFromMarkdown:markdown title:self.documentItem.fileName] : nil;
 
-    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-    self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:configuration];
-    self.webView.navigationDelegate = self;
-    self.webView.backgroundColor = HY_COLOR_BG_WHITE;
-    self.webView.opaque = NO;
-    [self.previewContainerView addSubview:self.webView];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                HY_STRONG_SELF
+                if (!strongSelf) {
+                    return;
+                }
+                if (htmlString == nil) {
+                    [strongSelf hy_hideLoading];
+                    [strongSelf hy_showEmptyViewWithImage:nil title:@"Markdown 解析失败" message:readError.localizedDescription ?: @"无法读取当前文件内容。"];
+                    return;
+                }
 
-    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.previewContainerView);
-    }];
+                WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+                strongSelf.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:configuration];
+                strongSelf.webView.navigationDelegate = strongSelf;
+                strongSelf.webView.backgroundColor = HY_COLOR_BG_WHITE;
+                strongSelf.webView.opaque = NO;
+                [strongSelf.previewContainerView addSubview:strongSelf.webView];
 
-    NSString *htmlString = [HYMarkdownRenderer HTMLStringFromMarkdown:markdown title:self.documentItem.fileName];
-    [self.webView loadHTMLString:htmlString baseURL:nil];
+                [strongSelf.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.edges.equalTo(strongSelf.previewContainerView);
+                }];
+
+                [strongSelf.webView loadHTMLString:htmlString baseURL:nil];
+                [strongSelf hy_hideLoading];
+            });
+        }
+    });
 }
 
 - (void)hy_showTextReader {
@@ -179,28 +200,47 @@
     [self hy_hideQuickLookToolbar];
     [self hy_hidePDFToolbar];
 
-    NSError *readError = nil;
-    NSString *text = [NSString stringWithContentsOfFile:self.documentItem.filePath
-                                               encoding:NSUTF8StringEncoding
-                                                  error:&readError];
-    if (text == nil) {
-        text = [NSString stringWithContentsOfFile:self.documentItem.filePath
-                                         encoding:NSUnicodeStringEncoding
-                                            error:&readError];
-    }
-    if (text == nil) {
-        [self hy_showEmptyViewWithImage:nil title:@"文本解析失败" message:readError.localizedDescription ?: @"无法读取当前文件内容。"];
-        return;
-    }
+    HY_WEAK_SELF
+    dispatch_async([HYAsyncTaskManager sharedInstance].parseQueue, ^{
+        @autoreleasepool {
+            NSError *readError = nil;
+            NSString *text = [NSString stringWithContentsOfFile:self.documentItem.filePath
+                                                       encoding:NSUTF8StringEncoding
+                                                          error:&readError];
+            if (text == nil) {
+                text = [NSString stringWithContentsOfFile:self.documentItem.filePath
+                                                 encoding:NSUnicodeStringEncoding
+                                                    error:&readError];
+            }
+            if (text == nil) {
+                text = [NSString stringWithContentsOfFile:self.documentItem.filePath
+                                                 encoding:NSUTF16StringEncoding
+                                                    error:&readError];
+            }
 
-    self.textReaderView = [[HYTextReaderView alloc] init];
-    [self.previewContainerView addSubview:self.textReaderView];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                HY_STRONG_SELF
+                if (!strongSelf) {
+                    return;
+                }
+                if (text == nil) {
+                    [strongSelf hy_hideLoading];
+                    [strongSelf hy_showEmptyViewWithImage:nil title:@"文本解析失败" message:readError.localizedDescription ?: @"无法读取当前文件内容。"];
+                    return;
+                }
 
-    [self.textReaderView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.previewContainerView);
-    }];
+                strongSelf.textReaderView = [[HYTextReaderView alloc] init];
+                [strongSelf.previewContainerView addSubview:strongSelf.textReaderView];
 
-    [self.textReaderView updateWithText:text cacheKey:self.documentItem.filePath];
+                [strongSelf.textReaderView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.edges.equalTo(strongSelf.previewContainerView);
+                }];
+
+                [strongSelf.textReaderView updateWithText:text cacheKey:strongSelf.documentItem.filePath];
+                [strongSelf hy_hideLoading];
+            });
+        }
+    });
 }
 
 - (void)hy_resetPreviewSubviews {
@@ -496,11 +536,17 @@
 #pragma mark - WKNavigationDelegate
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    [self hy_hideLoading];
     [self hy_showEmptyViewWithImage:nil title:@"页面渲染失败" message:error.localizedDescription ?: @"WKWebView 无法展示当前内容。"];
 }
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    [self hy_hideLoading];
     [self hy_showEmptyViewWithImage:nil title:@"页面加载失败" message:error.localizedDescription ?: @"WKWebView 无法加载当前内容。"];
+}
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    [self hy_hideLoading];
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate

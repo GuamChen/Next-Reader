@@ -70,29 +70,31 @@ static unsigned long long const HYDocumentImportMaximumFileSize = 200 * 1024 * 1
                                                                            options:NSDirectoryEnumerationSkipsPackageDescendants | NSDirectoryEnumerationSkipsHiddenFiles
                                                                       errorHandler:nil];
         for (NSURL *fileURL in enumerator) {
-            NSNumber *isDirectoryValue = nil;
-            [fileURL getResourceValue:&isDirectoryValue forKey:NSURLIsDirectoryKey error:nil];
-            if (isDirectoryValue.boolValue) {
-                continue;
+            @autoreleasepool {
+                NSNumber *isDirectoryValue = nil;
+                [fileURL getResourceValue:&isDirectoryValue forKey:NSURLIsDirectoryKey error:nil];
+                if (isDirectoryValue.boolValue) {
+                    continue;
+                }
+
+                HYDocumentType documentType = [self documentTypeForPath:fileURL.path];
+                if (documentType == HYDocumentTypeUnknown) {
+                    continue;
+                }
+
+                NSNumber *fileSizeValue = nil;
+                NSDate *modifiedDate = nil;
+                [fileURL getResourceValue:&fileSizeValue forKey:NSURLFileSizeKey error:nil];
+                [fileURL getResourceValue:&modifiedDate forKey:NSURLContentModificationDateKey error:nil];
+
+                HYDocumentItem *item = [[HYDocumentItem alloc] init];
+                item.fileName = fileURL.lastPathComponent ?: HY_STRING_EMPTY;
+                item.filePath = fileURL.path ?: HY_STRING_EMPTY;
+                item.documentType = documentType;
+                item.fileSize = fileSizeValue.unsignedLongLongValue;
+                item.modifiedDate = modifiedDate ?: [NSDate dateWithTimeIntervalSince1970:0];
+                [documents addObject:item];
             }
-
-            HYDocumentType documentType = [self documentTypeForPath:fileURL.path];
-            if (documentType == HYDocumentTypeUnknown) {
-                continue;
-            }
-
-            NSNumber *fileSizeValue = nil;
-            NSDate *modifiedDate = nil;
-            [fileURL getResourceValue:&fileSizeValue forKey:NSURLFileSizeKey error:nil];
-            [fileURL getResourceValue:&modifiedDate forKey:NSURLContentModificationDateKey error:nil];
-
-            HYDocumentItem *item = [[HYDocumentItem alloc] init];
-            item.fileName = fileURL.lastPathComponent ?: HY_STRING_EMPTY;
-            item.filePath = fileURL.path ?: HY_STRING_EMPTY;
-            item.documentType = documentType;
-            item.fileSize = fileSizeValue.unsignedLongLongValue;
-            item.modifiedDate = modifiedDate ?: [NSDate dateWithTimeIntervalSince1970:0];
-            [documents addObject:item];
         }
     }
 

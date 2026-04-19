@@ -12,10 +12,12 @@
 static NSString * const HYRecentPreviewRecordsDefaultsKey = @"com.nextreader.cache.recent.preview.records";
 static NSUInteger const HYRecentPreviewRecordsMaximumCount = 20;
 static NSUInteger const HYPreviewMetaCacheMaximumCount = 100;
+static NSUInteger const HYPreviewMetaCacheCleanupThreshold = 80;
 
 @interface HYDocumentCacheManager ()
 
 @property (nonatomic, strong) NSCache<NSString *, NSDictionary *> *previewMetaCache;
+@property (nonatomic, strong) NSMutableOrderedSet<NSString *> *cachedPreviewKeys;
 
 @end
 
@@ -35,6 +37,7 @@ static NSUInteger const HYPreviewMetaCacheMaximumCount = 100;
     if (self) {
         _previewMetaCache = [[NSCache alloc] init];
         _previewMetaCache.countLimit = HYPreviewMetaCacheMaximumCount;
+        _cachedPreviewKeys = [NSMutableOrderedSet orderedSet];
     }
     return self;
 }
@@ -50,7 +53,10 @@ static NSUInteger const HYPreviewMetaCacheMaximumCount = 100;
         @"fileSize": @(item.fileSize),
         @"modifiedDate": item.modifiedDate ?: [NSDate dateWithTimeIntervalSince1970:0],
     };
-    [self.previewMetaCache setObject:meta forKey:[self hy_cacheKeyForDocument:item]];
+    NSString *cacheKey = [self hy_cacheKeyForDocument:item];
+    [self.previewMetaCache setObject:meta forKey:cacheKey];
+    [self.cachedPreviewKeys removeObject:cacheKey];
+    [self.cachedPreviewKeys addObject:cacheKey];
 }
 
 - (id)cachedPreviewMetaForDocument:(HYDocumentItem *)item {
@@ -93,11 +99,9 @@ static NSUInteger const HYPreviewMetaCacheMaximumCount = 100;
 }
 
 - (void)clearTempCacheIfNeeded {
-    if (self.previewMetaCache.totalCostLimit > HYPreviewMetaCacheMaximumCount * 2) {
+    if (self.cachedPreviewKeys.count >= HYPreviewMetaCacheCleanupThreshold) {
         [self.previewMetaCache removeAllObjects];
-    }
-    if (self.previewMetaCache.countLimit > HYPreviewMetaCacheMaximumCount) {
-        self.previewMetaCache.countLimit = HYPreviewMetaCacheMaximumCount;
+        [self.cachedPreviewKeys removeAllObjects];
     }
 }
 

@@ -10,6 +10,8 @@
 #import "HYDocumentItem.h"
 #import "HYDocumentListCell.h"
 #import "HYDocumentPreviewViewController.h"
+#import "HYAsyncTaskManager.h"
+#import "HYDocumentCacheManager.h"
 #import "HYFileManagerService.h"
 #import "HYDocumentImportManager.h"
 
@@ -46,10 +48,11 @@
             return;
         }
 
-        [strongSelf hy_loadDocuments];
         if (items.count > 0) {
+            [strongSelf hy_applyImportedItemsIncrementally:items];
             [strongSelf hy_showToast:[NSString stringWithFormat:@"成功导入 %lu 个文件", (unsigned long)items.count]];
         } else {
+            [strongSelf hy_loadDocuments];
             [strongSelf hy_showToast:[strongSelf hy_importFailureMessageForError:error]];
         }
     };
@@ -86,14 +89,21 @@
 - (void)hy_loadDocuments {
     [self hy_showLoadingWithMessage:@"正在扫描本地文档..."];
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray<HYDocumentItem *> *documents = [[HYFileManagerService sharedInstance] fetchLocalDocuments];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.dataSource = documents;
-            [self hy_hideLoading];
-            [self.tableView reloadData];
-            [self hy_updateEmptyState];
-        });
+    dispatch_async([HYAsyncTaskManager sharedInstance].ioQueue, ^{
+        @autoreleasepool {
+            NSArray<HYDocumentItem *> *documents = [[HYFileManagerService sharedInstance] fetchLocalDocuments];
+            for (HYDocumentItem *item in documents) {
+                [[HYDocumentCacheManager sharedInstance] cachePreviewMetaForDocument:item];
+            }
+            [[HYDocumentCacheManager sharedInstance] clearTempCacheIfNeeded];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.dataSource = documents;
+                [self hy_hideLoading];
+                [self.tableView reloadData];
+                [self hy_updateEmptyState];
+            });
+        }
     });
 }
 
@@ -111,6 +121,57 @@
 - (void)importDocumentTapped {
     [self hy_showLoadingWithMessage:@"正在准备导入..."];
     [self.importManager presentDocumentPickerFromViewController:self];
+}
+
+- (void)hy_applyImportedItemsIncrementally:(NSArray<HYDocumentItem *> *)items {
+    if (items.count == 0) {
+        [self hy_loadDocuments];
+        return;
+    }
+
+    NSArray<HYDocumentItem *> *sortedItems = [items sortedArrayUsingComparator:^NSComparisonResult(HYDocumentItem *obj1, HYDocumentItem *obj2) {
+        return [obj2.modifiedDate compare:obj1.modifiedDate];
+    }];
+
+    NSMutableArray<HYDocumentItem *> *mergedDataSource = [self.dataSource mutableCopy] ?: [NSMutableArray array];
+    NSIndexSet *duplicateIndexes = [mergedDataSource indexesOfObjectsPassingTest:^BOOL(HYDocumentItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        for (HYDocumentItem *newItem in sortedItems) {
+            if ([obj.filePath isEqualToString:newItem.filePath]) {
+                return YES;
+            }
+        }
+        return NO;
+    }];
+    if (duplicateIndexes.count > 0) {
+        [mergedDataSource removeObjectsAtIndexes:duplicateIndexes];
+    }
+
+    NSIndexSet *insertionIndexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, sortedItems.count)];
+    [mergedDataSource insertObjects:sortedItems atIndexes:insertionIndexes];
+
+    BOOL canPerformIncrementalInsert = self.dataSource.count > 0 && duplicateIndexes.count == 0;
+    self.dataSource = mergedDataSource.copy;
+    [self hy_updateEmptyState];
+
+    if (!canPerformIncrementalInsert) {
+        [self.tableView reloadData];
+        return;
+    }
+
+    NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+    for (NSUInteger index = 0; index < sortedItems.count; index++) {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+    }
+
+    if (@available(iOS 11.0, *)) {
+        [self.tableView performBatchUpdates:^{
+            [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+        } completion:nil];
+    } else {
+        [self.tableView beginUpdates];
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
+    }
 }
 
 #pragma mark - UITableViewDataSource

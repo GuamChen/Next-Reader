@@ -9,7 +9,9 @@
 
 #import <MobileCoreServices/MobileCoreServices.h>
 
+#import "HYAsyncTaskManager.h"
 #import "HYDocumentItem.h"
+#import "HYDocumentCacheManager.h"
 #import "HYFileManagerService.h"
 
 @interface HYDocumentImportManager () <UIDocumentPickerDelegate>
@@ -44,39 +46,42 @@
 }
 
 - (void)handlePickedURLs:(NSArray<NSURL *> *)urls completion:(void (^ _Nullable)(NSArray<HYDocumentItem *> * _Nonnull))completion {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSMutableArray<HYDocumentItem *> *items = [NSMutableArray array];
-        NSError *lastError = nil;
+    dispatch_async([HYAsyncTaskManager sharedInstance].ioQueue, ^{
+        @autoreleasepool {
+            NSMutableArray<HYDocumentItem *> *items = [NSMutableArray array];
+            NSError *lastError = nil;
 
-        for (NSURL *url in urls) {
-            BOOL didStartAccessing = [url startAccessingSecurityScopedResource];
-            NSError *importError = nil;
-            HYDocumentItem *item = [[HYFileManagerService sharedInstance] importDocumentFromScopedURL:url error:&importError];
-            if (didStartAccessing) {
-                [url stopAccessingSecurityScopedResource];
-            }
-            if (item != nil) {
-                [items addObject:item];
-            } else if (importError != nil) {
-                lastError = importError;
-                HYLog(@"Document import failed for %@: %@", url.lastPathComponent, importError.localizedDescription);
-            }
-        }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (completion) {
-                completion(items.copy);
-            }
-            if (self.importCompletion) {
-                NSError *uiError = lastError;
-                if (items.count == 0 && uiError == nil) {
-                    uiError = [NSError errorWithDomain:NSCocoaErrorDomain
-                                                  code:HYDocumentImportErrorCodeCopyFailed
-                                              userInfo:@{NSLocalizedDescriptionKey: @"未成功导入任何文件。"}];
+            for (NSURL *url in urls) {
+                BOOL didStartAccessing = [url startAccessingSecurityScopedResource];
+                NSError *importError = nil;
+                HYDocumentItem *item = [[HYFileManagerService sharedInstance] importDocumentFromScopedURL:url error:&importError];
+                if (didStartAccessing) {
+                    [url stopAccessingSecurityScopedResource];
                 }
-                self.importCompletion(items.copy, uiError, NO);
+                if (item != nil) {
+                    [items addObject:item];
+                    [[HYDocumentCacheManager sharedInstance] cachePreviewMetaForDocument:item];
+                } else if (importError != nil) {
+                    lastError = importError;
+                    HYLog(@"Document import failed for %@: %@", url.lastPathComponent, importError.localizedDescription);
+                }
             }
-        });
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion(items.copy);
+                }
+                if (self.importCompletion) {
+                    NSError *uiError = lastError;
+                    if (items.count == 0 && uiError == nil) {
+                        uiError = [NSError errorWithDomain:NSCocoaErrorDomain
+                                                      code:HYDocumentImportErrorCodeCopyFailed
+                                                  userInfo:@{NSLocalizedDescriptionKey: @"未成功导入任何文件。"}];
+                    }
+                    self.importCompletion(items.copy, uiError, NO);
+                }
+            });
+        }
     });
 }
 
