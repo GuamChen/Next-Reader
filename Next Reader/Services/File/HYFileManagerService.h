@@ -11,13 +11,28 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ERROR_ENUM(NSCocoaErrorDomain, HYDocumentImportErrorCode) {
+    HYDocumentImportErrorCodeMissingURL = 7001,
+    HYDocumentImportErrorCodeUnsupportedType,
+    HYDocumentImportErrorCodeUnreadable,
+    HYDocumentImportErrorCodeTooLarge,
+    HYDocumentImportErrorCodeCopyFailed,
+};
+
 @interface HYFileManagerService : NSObject
 
 + (instancetype)sharedInstance;
+- (void)prepareManagedDirectoriesIfNeeded;
 - (NSArray<HYDocumentItem *> *)fetchLocalDocuments;
-- (BOOL)importDocumentAtURL:(NSURL *)sourceURL error:(NSError * _Nullable __autoreleasing *)error;
+- (nullable HYDocumentItem *)importDocumentFromScopedURL:(NSURL *)sourceURL error:(NSError * _Nullable __autoreleasing *)error;
 - (HYDocumentType)documentTypeForPath:(NSString *)filePath;
 - (NSString *)formattedFileSize:(unsigned long long)fileSize;
+- (unsigned long long)cacheDirectorySize;
+- (unsigned long long)tempDirectorySize;
+- (unsigned long long)totalManagedCacheSize;
+- (unsigned long long)clearCacheDirectory;
+- (unsigned long long)clearTempDirectory;
+- (unsigned long long)clearAllManagedCaches;
 
 @end
 
