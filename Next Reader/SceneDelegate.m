@@ -8,8 +8,10 @@
 #import "SceneDelegate.h"
 #import "HYExternalDocumentRouter.h"
 #import "HYMainTabBarController.h"
+#import "SplashScreenController.h"
 
 @interface SceneDelegate ()
+@property (nonatomic, strong) SplashScreenController *launchScreenVC;
 
 @end
 
@@ -25,16 +27,33 @@
     self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
     self.window.backgroundColor = HY_COLOR_BG_WHITE;
     
-    // 设置根控制器
     HYMainTabBarController *tabBarController = [[HYMainTabBarController alloc] init];
     self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];
+    
+    // 显示开屏界面
+    [self showLaunchScreen];
+    
 
+    // 处理外部链接
     UIOpenURLContext *openURLContext = connectionOptions.URLContexts.allObjects.firstObject;
     if (openURLContext.URL != nil) {
         [[HYExternalDocumentRouter sharedInstance] handleOpenURL:openURLContext.URL options:nil];
     }
 }
+
+
+- (void)showLaunchScreen {
+    self.launchScreenVC = [[SplashScreenController alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [self.launchScreenVC showInWindow:self.window completion:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        // 开屏结束后的回调，可以在这里做一些初始化工作
+        strongSelf.launchScreenVC = nil;
+        NSLog(@"开屏界面已关闭");
+    }];
+}
+
 
 - (void)sceneDidDisconnect:(UIScene *)scene API_AVAILABLE(ios(13.0)) {
     // 场景被系统释放时调用

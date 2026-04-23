@@ -29,7 +29,7 @@
 		86DDCAC02F91492200D186B2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCAAE2F91492200D186B2 /* AppDelegate.m */; };
 		86DDCAC12F91492200D186B2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCAB32F91492200D186B2 /* main.m */; };
 		86DDCAC22F91492200D186B2 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCAB72F91492200D186B2 /* SceneDelegate.m */; };
-		86DDCAC32F91492200D186B2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCAB92F91492200D186B2 /* ViewController.m */; };
+		86DDCAC32F91492200D186B2 /* SplashScreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCAB92F91492200D186B2 /* SplashScreenController.m */; };
 		86DDCAC42F91492200D186B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86DDCAAF2F91492200D186B2 /* Assets.xcassets */; };
 		86DDCAC62F91492200D186B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86DDCAB22F91492200D186B2 /* LaunchScreen.storyboard */; };
 		86DDCAC92F91492200D186B2 /* HYMacro.h in Resources */ = {isa = PBXBuildFile; fileRef = 86DDCAA22F91492200D186B2 /* HYMacro.h */; };
@@ -99,8 +99,8 @@
 		86DDCAB42F91492200D186B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		86DDCAB62F91492200D186B2 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		86DDCAB72F91492200D186B2 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
-		86DDCAB82F91492200D186B2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		86DDCAB92F91492200D186B2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		86DDCAB82F91492200D186B2 /* SplashScreenController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SplashScreenController.h; sourceTree = "<group>"; };
+		86DDCAB92F91492200D186B2 /* SplashScreenController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SplashScreenController.m; sourceTree = "<group>"; };
 		86DDCAF22F914B0300D186B2 /* MASCompositeConstraint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MASCompositeConstraint.h; sourceTree = "<group>"; };
 		86DDCAF32F914B0300D186B2 /* MASCompositeConstraint.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MASCompositeConstraint.m; sourceTree = "<group>"; };
 		86DDCAF42F914B0300D186B2 /* MASConstraint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MASConstraint.h; sourceTree = "<group>"; };
@@ -401,8 +401,8 @@
 				86DDCAB52F91492200D186B2 /* Main.storyboard */,
 				86DDCAB62F91492200D186B2 /* SceneDelegate.h */,
 				86DDCAB72F91492200D186B2 /* SceneDelegate.m */,
-				86DDCAB82F91492200D186B2 /* ViewController.h */,
-				86DDCAB92F91492200D186B2 /* ViewController.m */,
+				86DDCAB82F91492200D186B2 /* SplashScreenController.h */,
+				86DDCAB92F91492200D186B2 /* SplashScreenController.m */,
 			);
 			path = "Next Reader";
 			sourceTree = "<group>";
@@ -533,7 +533,7 @@
 				86DDCAC12F91492200D186B2 /* main.m in Sources */,
 				86DDCB242F91554900D186B2 /* HYBaseNavigationController.m in Sources */,
 				86DDCAC22F91492200D186B2 /* SceneDelegate.m in Sources */,
-				86DDCAC32F91492200D186B2 /* ViewController.m in Sources */,
+				86DDCAC32F91492200D186B2 /* SplashScreenController.m in Sources */,
 				86DDCB0D2F914B0300D186B2 /* MASCompositeConstraint.m in Sources */,
 				86DDCB0E2F914B0300D186B2 /* MASConstraint.m in Sources */,
 				86DDCB0F2F914B0300D186B2 /* MASConstraintMaker.m in Sources */,

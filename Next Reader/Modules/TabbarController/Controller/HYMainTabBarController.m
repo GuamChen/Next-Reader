@@ -15,7 +15,7 @@
 #import "HYCustomTabBarItemView.h"
 #import "HYCustomTabBarView.h"
 
-@interface HYMainTabBarController () <UITabBarControllerDelegate>
+@interface HYMainTabBarController () <UITabBarControllerDelegate,UINavigationControllerDelegate>
 
 // 自定义 tabbar 只负责 UI 展示，真正的页面切换仍然由 UITabBarController 维护。
 @property (nonatomic, strong) HYCustomTabBarView *customTabBarView;
@@ -34,11 +34,19 @@
     [self setupTabBarAppearance];
     [self setupCustomTabBar];
     [self.customTabBarView setSelectedIndex:self.selectedIndex animated:NO];
+    
+    for (UIViewController *vc in self.viewControllers) {
+            if ([vc isKindOfClass:[UINavigationController class]]) {
+                UINavigationController *nav = (UINavigationController *)vc;
+                nav.delegate = self;
+            }
+        }
+    
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-
+    
     self.tabBar.clipsToBounds = NO;
     self.tabBar.layer.masksToBounds = NO;
     // 系统 tabBar 的按钮仍然存在，这里只保留它的容器能力，把默认按钮隐藏掉。
@@ -47,7 +55,7 @@
             subview.hidden = YES;
         }
     }
-
+    
     // 自定义 tabbar 比系统 tabbar 更高，因为需要给上浮按钮预留可见空间。
     CGFloat customHeight = CGRectGetHeight(self.tabBar.bounds) + HYCustomTabBarFloatingHeight;
     self.customTabBarView.frame = CGRectMake(0.0f,
@@ -148,6 +156,7 @@
     };
 
     [self.view addSubview:self.customTabBarView];
+//    [self.tabBar addSubview:self.customTabBarView];
 }
 
 - (UIImage *)hy_tabBarIconNamed:(NSString *)assetName systemName:(NSString *)systemName {
@@ -181,6 +190,22 @@
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
     // 兜底同步：无论是点击自定义 tab，还是外部代码修改 selectedIndex，都统一刷新 UI 状态。
     [self.customTabBarView setSelectedIndex:self.selectedIndex animated:YES];
+}
+
+#pragma mark - UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated {
+    
+    // 检查即将显示的 viewController 是否设置了 hidesBottomBarWhenPushed
+    BOOL shouldHideTabBar = viewController.hidesBottomBarWhenPushed;
+    
+    [UIView animateWithDuration:animated ? 0.3 : 0 animations:^{
+        self.customTabBarView.alpha = shouldHideTabBar ? 0.0f : 1.0f;
+    } completion:^(BOOL finished) {
+        self.customTabBarView.hidden = shouldHideTabBar;
+    }];
 }
 
 @end
