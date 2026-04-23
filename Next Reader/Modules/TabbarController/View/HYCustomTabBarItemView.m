@@ -7,6 +7,8 @@
 
 #import "HYCustomTabBarItemView.h"
 
+#import "HYBaseLabel.h"
+
 static CGFloat const HYCustomTabBarBubbleSize = 58.0f;
 static CGFloat const HYCustomTabBarBubbleTopInset = 8.0f;
 
@@ -28,9 +30,10 @@ static CGFloat const HYCustomTabBarBubbleTopInset = 8.0f;
         [self addSubview:_defaultIconView];
 
         // 默认态标题：只有未选中时可见，选中后会淡出。
-        _titleLabel = [HYUIBuildFactory labelWithFont:HY_FONT_SMALL
-                                            textColor:HY_COLOR_TEXT_TERTIARY
-                                            alignment:NSTextAlignmentCenter];
+        _titleLabel = [[HYBaseLabel alloc] init];
+        _titleLabel.hy_baseFont = HY_FONT_SMALL;
+        _titleLabel.textColor = HY_COLOR_TEXT_TERTIARY;
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.text = title;
         [self addSubview:_titleLabel];
 

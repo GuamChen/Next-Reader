@@ -13,6 +13,7 @@
 #import "HYAsyncTaskManager.h"
 #import "HYDocumentCacheManager.h"
 #import "HYFileManagerService.h"
+#import "HYFontManager.h"
 #import "HYDocumentImportManager.h"
 
 @interface HYDocumentListViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -58,10 +59,15 @@
     };
 
     [self hy_setupTableView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hy_fontSizeDidChangeNotification:) name:HYFontSizeDidChangeNotification object:nil];
 }
 
 - (void)hy_viewWillAppearForFirstTime {
     [self hy_loadDocuments];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)hy_setupTableView {
@@ -212,6 +218,15 @@
         default:
             return error.localizedDescription ?: @"导入失败，请稍后重试";
     }
+}
+
+- (void)hy_fontSizeDidChangeNotification:(NSNotification *)notification {
+    [UIView transitionWithView:self.tableView
+                      duration:0.15f
+                       options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowAnimatedContent | UIViewAnimationOptionBeginFromCurrentState
+                    animations:^{
+        [self.tableView reloadData];
+    } completion:nil];
 }
 
 @end

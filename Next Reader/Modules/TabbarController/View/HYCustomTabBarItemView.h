@@ -7,12 +7,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class HYBaseLabel;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HYCustomTabBarItemView : UIControl
 
 @property (nonatomic, strong) UIImageView *defaultIconView;
-@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) HYBaseLabel *titleLabel;
 @property (nonatomic, strong) UIView *bubbleView;
 @property (nonatomic, strong) UIImageView *bubbleIconView;
 

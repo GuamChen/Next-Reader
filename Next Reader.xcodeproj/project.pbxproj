@@ -47,6 +47,10 @@
 		86DDCB1D2F914E3D00D186B2 /* HYToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCB1C2F914E3D00D186B2 /* HYToastView.m */; };
 		86DDCB202F914E5C00D186B2 /* HYEmptyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCB1F2F914E5C00D186B2 /* HYEmptyView.m */; };
 		86DDCB242F91554900D186B2 /* HYBaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DDCB232F91553E00D186B2 /* HYBaseNavigationController.m */; };
+		86DE2CB62F9A63E5002BC5DA /* HYBaseLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DE2CB52F9A63E5002BC5DA /* HYBaseLabel.m */; };
+		86DE2CBA2F9A63E5002BC5DA /* HYBaseButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DE2CB92F9A63E5002BC5DA /* HYBaseButton.m */; };
+		86DE2CBC2F9A63E5002BC5DA /* HYFontSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DE2CBB2F9A63E5002BC5DA /* HYFontSettingViewController.m */; };
+		86DE2CCC2F9A6763002BC5DA /* HYFontManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DE2CCA2F9A6763002BC5DA /* HYFontManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -135,6 +139,14 @@
 		86DDCB212F914FD900D186B2 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		86DDCB222F91553B00D186B2 /* HYBaseNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYBaseNavigationController.h; sourceTree = "<group>"; };
 		86DDCB232F91553E00D186B2 /* HYBaseNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYBaseNavigationController.m; sourceTree = "<group>"; };
+		86DE2CB42F9A63E5002BC5DA /* HYBaseLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYBaseLabel.h; sourceTree = "<group>"; };
+		86DE2CB52F9A63E5002BC5DA /* HYBaseLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYBaseLabel.m; sourceTree = "<group>"; };
+		86DE2CB72F9A63E5002BC5DA /* HYBaseButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYBaseButton.h; sourceTree = "<group>"; };
+		86DE2CB82F9A63E5002BC5DA /* HYFontSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYFontSettingViewController.h; sourceTree = "<group>"; };
+		86DE2CB92F9A63E5002BC5DA /* HYBaseButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYBaseButton.m; sourceTree = "<group>"; };
+		86DE2CBB2F9A63E5002BC5DA /* HYFontSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYFontSettingViewController.m; sourceTree = "<group>"; };
+		86DE2CC92F9A6763002BC5DA /* HYFontManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYFontManager.h; sourceTree = "<group>"; };
+		86DE2CCA2F9A6763002BC5DA /* HYFontManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYFontManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -313,8 +325,6 @@
 				86DDCA9A2F91492200D186B2 /* HYBaseViewController.m */,
 				86DDCB222F91553B00D186B2 /* HYBaseNavigationController.h */,
 				86DDCB232F91553E00D186B2 /* HYBaseNavigationController.m */,
-				86DDCA9F2F91492200D186B2 /* HYSettingViewController.h */,
-				86DDCAA02F91492200D186B2 /* HYSettingViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -338,6 +348,10 @@
 				86DDCB192F914E1B00D186B2 /* HYLoadingView.m */,
 				86DDCB1E2F914E5C00D186B2 /* HYEmptyView.h */,
 				86DDCB1F2F914E5C00D186B2 /* HYEmptyView.m */,
+				86DE2CB42F9A63E5002BC5DA /* HYBaseLabel.h */,
+				86DE2CB52F9A63E5002BC5DA /* HYBaseLabel.m */,
+				86DE2CB72F9A63E5002BC5DA /* HYBaseButton.h */,
+				86DE2CB92F9A63E5002BC5DA /* HYBaseButton.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -355,6 +369,7 @@
 		86DDCAA92F91492200D186B2 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				86DE2CCD2F9A67C6002BC5DA /* Setting */,
 				863774462F94DC14001B34B5 /* TabbarController */,
 				863774132F938038001B34B5 /* DocumentList */,
 				863774142F938038001B34B5 /* DocumentPreview */,
@@ -376,6 +391,7 @@
 		86DDCAAC2F91492200D186B2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				86DE2CCB2F9A6763002BC5DA /* Font */,
 				863774122F938035001B34B5 /* File */,
 				863774312F94A8CE001B34B5 /* Import */,
 				863774352F94AC55001B34B5 /* Async */,
@@ -445,6 +461,26 @@
 				86DDCB0B2F914B0300D186B2 /* Masonry */,
 			);
 			path = SDK;
+			sourceTree = "<group>";
+		};
+		86DE2CCB2F9A6763002BC5DA /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				86DE2CC92F9A6763002BC5DA /* HYFontManager.h */,
+				86DE2CCA2F9A6763002BC5DA /* HYFontManager.m */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
+		86DE2CCD2F9A67C6002BC5DA /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				86DDCA9F2F91492200D186B2 /* HYSettingViewController.h */,
+				86DDCAA02F91492200D186B2 /* HYSettingViewController.m */,
+				86DE2CB82F9A63E5002BC5DA /* HYFontSettingViewController.h */,
+				86DE2CBB2F9A63E5002BC5DA /* HYFontSettingViewController.m */,
+			);
+			path = Setting;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -530,12 +566,14 @@
 				86DDCABF2F91492200D186B2 /* UIColor+HYExtension.m in Sources */,
 				86DDCAC02F91492200D186B2 /* AppDelegate.m in Sources */,
 				8637742B2F9388E2001B34B5 /* HYMarkdownRenderer.m in Sources */,
+				86DE2CB62F9A63E5002BC5DA /* HYBaseLabel.m in Sources */,
 				86DDCAC12F91492200D186B2 /* main.m in Sources */,
 				86DDCB242F91554900D186B2 /* HYBaseNavigationController.m in Sources */,
 				86DDCAC22F91492200D186B2 /* SceneDelegate.m in Sources */,
 				86DDCAC32F91492200D186B2 /* SplashScreenController.m in Sources */,
 				86DDCB0D2F914B0300D186B2 /* MASCompositeConstraint.m in Sources */,
 				86DDCB0E2F914B0300D186B2 /* MASConstraint.m in Sources */,
+				86DE2CCC2F9A6763002BC5DA /* HYFontManager.m in Sources */,
 				86DDCB0F2F914B0300D186B2 /* MASConstraintMaker.m in Sources */,
 				86DDCB202F914E5C00D186B2 /* HYEmptyView.m in Sources */,
 				863774302F9395F2001B34B5 /* HYDocumentListViewController.m in Sources */,
@@ -553,8 +591,10 @@
 				863774392F94AC77001B34B5 /* HYAsyncTaskManager.m in Sources */,
 				863774232F9380A6001B34B5 /* HYDocumentListCell.m in Sources */,
 				86DDCB162F914B0300D186B2 /* ViewController+MASAdditions.m in Sources */,
+				86DE2CBA2F9A63E5002BC5DA /* HYBaseButton.m in Sources */,
 				8637744B2F94DC3C001B34B5 /* HYCustomTabBarBackgroundView.m in Sources */,
 				863774212F9380A6001B34B5 /* HYDocumentPreviewViewController.m in Sources */,
+				86DE2CBC2F9A63E5002BC5DA /* HYFontSettingViewController.m in Sources */,
 				8637741E2F9380A6001B34B5 /* HYFileManagerService.m in Sources */,
 				86DDCB1A2F914E1B00D186B2 /* HYLoadingView.m in Sources */,
 			);

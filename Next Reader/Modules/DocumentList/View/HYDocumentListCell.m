@@ -7,6 +7,7 @@
 
 #import "HYDocumentListCell.h"
 
+#import "HYBaseLabel.h"
 #import "HYDocumentItem.h"
 #import "HYFileManagerService.h"
 
@@ -14,9 +15,9 @@
 
 @property (nonatomic, strong) UIView *iconContainerView;
 @property (nonatomic, strong) UIImageView *iconImageView;
-@property (nonatomic, strong) UILabel *iconTextLabel;
-@property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UILabel *metaLabel;
+@property (nonatomic, strong) HYBaseLabel *iconTextLabel;
+@property (nonatomic, strong) HYBaseLabel *titleLabel;
+@property (nonatomic, strong) HYBaseLabel *metaLabel;
 @property (nonatomic, strong) UIView *separatorLine;
 
 @end
@@ -48,20 +49,20 @@
     self.iconImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.iconContainerView addSubview:self.iconImageView];
 
-    self.iconTextLabel = [[UILabel alloc] init];
-    self.iconTextLabel.font = HY_FONT_BOLD(11.0f);
+    self.iconTextLabel = [[HYBaseLabel alloc] init];
+    self.iconTextLabel.hy_baseFont = HY_FONT_BOLD(11.0f);
     self.iconTextLabel.textAlignment = NSTextAlignmentCenter;
     self.iconTextLabel.textColor = HY_COLOR_BG_WHITE;
     [self.iconContainerView addSubview:self.iconTextLabel];
 
-    self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.font = HY_FONT_MEDIUM(HY_FONT_SIZE_BODY);
+    self.titleLabel = [[HYBaseLabel alloc] init];
+    self.titleLabel.hy_baseFont = HY_FONT_MEDIUM(HY_FONT_SIZE_BODY);
     self.titleLabel.textColor = HY_COLOR_TEXT_PRIMARY;
     self.titleLabel.numberOfLines = 1;
     [self.contentView addSubview:self.titleLabel];
 
-    self.metaLabel = [[UILabel alloc] init];
-    self.metaLabel.font = HY_FONT_CAPTION;
+    self.metaLabel = [[HYBaseLabel alloc] init];
+    self.metaLabel.hy_baseFont = HY_FONT_CAPTION;
     self.metaLabel.textColor = HY_COLOR_TEXT_SECONDARY;
     self.metaLabel.numberOfLines = 1;
     [self.contentView addSubview:self.metaLabel];
